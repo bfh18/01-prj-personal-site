@@ -1,107 +1,167 @@
-/* Base reset and theme */
+/* ─── Base & Background Animation ───────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: 'Courier New', monospace;
-  background-color: #0f1117;
+  background: linear-gradient(135deg, #0f1117, #1f2430, #0f1117);
+  background-size: 400% 400%;
+  animation: bgShift 15s ease infinite;
   color: #c9d1d9;
   line-height: 1.6;
 }
-
-a {
-  text-decoration: none;
-  color: #58a6ff;
+@keyframes bgShift {
+  0%   { background-position:0% 50%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
 }
+a { text-decoration: none; color: #58a6ff; }
+a:hover  { text-shadow: 0 0 8px #58a6ff; }
 
+/* ─── Terminal Window & Controls ────────────────────────────────────────────── */
+.terminal-window {
+  max-width: 900px;
+  margin: 2em auto;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.controls {
+  background: #161b22;
+  padding: 6px 12px;
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.btn.red    { background: #ff5f56; }
+.btn.yellow { background: #ffbd2e; }
+.btn.green  { background: #27c93f; }
+
+/* ─── Navigation ─────────────────────────────────────────────────────────────── */
 nav {
-  background-color: #161b22;
-  color: #fff;
+  background: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1em 2em;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 1em;
   border-bottom: 1px solid #30363d;
 }
-
 nav h1 {
-  margin: 0;
-  font-size: 1.4em;
-  font-weight: 700;
+  margin: 0; font-size: 1.4em; font-weight: 700;
 }
-
 nav ul {
   list-style: none;
   display: flex;
   gap: 1.2em;
 }
-
 nav ul li a {
-  color: #c9d1d9;
   font-weight: bold;
-  transition: color 0.3s;
+  transition: transform 0.2s, text-shadow 0.2s;
+}
+nav ul li a:hover {
+  transform: scale(1.1);
 }
 
-nav ul li a:hover {
+/* ─── Glitch Effect on Title ────────────────────────────────────────────────── */
+.glitch {
+  position: relative;
   color: #58a6ff;
 }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  opacity: 0.8;
+}
+.glitch::before {
+  animation: glitchTop 2s infinite;
+  clip: rect(0, 9999px, 45%, 0);
+  color: #ff4394;
+}
+.glitch::after {
+  animation: glitchBot 3s infinite;
+  clip: rect(55%, 9999px, 100%, 0);
+  color: #22c1c3;
+}
+@keyframes glitchTop {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(-2px,-2px); }
+  40%  { transform: translate(-2px,2px); }
+  60%  { transform: translate(2px,-2px); }
+  80%  { transform: translate(2px,2px); }
+  100% { transform: translate(0,0); }
+}
+@keyframes glitchBot {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(2px,2px); }
+  40%  { transform: translate(2px,-2px); }
+  60%  { transform: translate(-2px,2px); }
+  80%  { transform: translate(-2px,-2px); }
+  100% { transform: translate(0,0); }
+}
 
+/* ─── Sections & Fade-In ─────────────────────────────────────────────────────── */
 section {
   padding: 5em 2em;
-  max-width: 800px;
-  margin: auto;
+  max-width: 800px; margin: auto;
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s ease forwards;
 }
+.fade-in { animation-delay: 0.3s; }
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
 
+/* ─── Typewriter Effect ─────────────────────────────────────────────────────── */
+.typewriter h2,
+.typewriter p {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 0.15em solid #58a6ff;
+  animation:
+    typing 2.5s steps(30, end),
+    blinkCaret 0.75s step-end infinite;
+}
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+@keyframes blinkCaret {
+  from, to { border-color: transparent; }
+  50%      { border-color: #58a6ff; }
+}
+
+/* ─── Headings & Prompts ────────────────────────────────────────────────────── */
 section h2 {
-  border-left: 4px solid #58a6ff;
-  padding-left: 0.5em;
+  position: relative;
+  padding-left: 1em;
   margin-bottom: 1em;
 }
+section h2::before {
+  content: "> ";
+  position: absolute;
+  left: 0;
+  color: #58a6ff;
+}
 
+/* ─── Skills & Social Links ─────────────────────────────────────────────────── */
 .skills-list {
-  list-style: none;
-  padding: 0;
+  list-style: none; padding: 0;
 }
-
 .skills-list li {
-  margin: 0.8em 0;
-  font-size: 1.1em;
+  margin: 0.8em 0; font-size: 1.1em;
 }
-
-.skills-list i {
-  margin-right: 0.5em;
-  color: #58a6ff;
+.skills-list i, .social-links i {
+  margin-right: 0.5em; color: #58a6ff;
 }
-
 .social-links {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  font-size: 1.1em;
-  margin-top: 1em;
+  display: flex; flex-direction: column; gap: 1em;
+  font-size: 1.1em; margin-top: 1em;
 }
-
-.social-links a i {
-  margin-right: 0.5em;
-  color: #58a6ff;
-}
-
 .social-links a:hover {
   text-decoration: underline;
-}
-
-/* Animation */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation-delay: 0.2s;
 }
